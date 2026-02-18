@@ -30,10 +30,16 @@ function Login() {
       navigate("/dashboard");
 
     } catch (err) {
-      toast.error(
-        err.response?.data?.message || "Login failed."
-      );
-    } finally {
+  if (err.response?.data?.errors) {
+    const errorMessages = err.response.data.errors
+      .map(e => e.msg)
+      .join(", ");
+
+    toast.error(errorMessages);
+  } else {
+    toast.error(err.response?.data?.message || "Signup failed");
+  }
+} finally {
       setLoading(false);
       setEmail("");
       setPassword("");
@@ -42,7 +48,7 @@ function Login() {
 
   return (
     <div className="auth-container">
-      <form className="auth-card" onSubmit={handleLogin}>
+      <form className="auth-card" onSubmit={handleLogin} noValidate>
         <h2>Login</h2>
 
         <input
@@ -50,7 +56,6 @@ function Login() {
           placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
 
         <input
@@ -58,7 +63,6 @@ function Login() {
           placeholder="Enter password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
 
         <button type="submit" disabled={loading}>
