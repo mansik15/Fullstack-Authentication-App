@@ -21,9 +21,20 @@ function Dashboard() {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const logout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      console.log(refreshToken)
+      const res = await axios.post("/logout", {refreshToken});
+    } catch (err) {
+      console.error(err);
+    } finally {
+    // Always clear tokens locally
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
     navigate("/login");
+    }
   };
 
   return (

@@ -23,7 +23,10 @@ function Login() {
 
       toast.success("Login successful!");
       console.log(res.data);
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
+
+      //localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
 
     } catch (err) {
